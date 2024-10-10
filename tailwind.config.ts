@@ -11,8 +11,17 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        action: "#CAFF00",
+        black:{
+          500: "#0a0a0a",
+          600: "#030303",
+          700: "#070707"
+        }
       },
     },
+    fontFamily: {
+      powerGrotesk: ['var(--font-powerGrotesk)']
+    }
   },
   plugins: [],
 };
