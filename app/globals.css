@@ -24,6 +24,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .inner-width{
+    @apply mx-[200px]
+  }
 }
 
 .bn-editor{
