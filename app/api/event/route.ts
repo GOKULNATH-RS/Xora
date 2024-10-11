@@ -1,13 +1,18 @@
-import exp from 'constants'
+import connectDB from '@/db/db'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET() {
+  await connectDB()
+
+  // get all events logic here
+
   return NextResponse.json({ message: 'Events' })
 }
 
 export async function POST(req: NextRequest) {
-  const { id } = await req.json()
-  console.log(id)
+  await connectDB()
 
-  return NextResponse.json({ id })
+  // create event logic here
+
+  return NextResponse.json({ message: 'Create Event' })
 }

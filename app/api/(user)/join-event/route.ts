@@ -1,11 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server'
 
+export async function POST(req: NextRequest) {
+  const { eventId } = await req.json()
 
-export async function POST(req: NextRequest){
-    
-    const body = await req.json();
+  // add userId to event participants[]
 
-
-    return NextResponse.json({message: "Join Event"})
+  return NextResponse.json({ message: 'Join Event' })
 }
