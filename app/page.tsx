@@ -9,8 +9,8 @@ import DiamondBig from '../public/assets/Diamond-left.svg'
 
 export default function Home() {
   return (
-    <main className='flex flex-col gap-10 items-center h-[80vh] max-lg:h-[40vh] relative py-20 max-lg:py-10'>
-      <div className='flex flex-col items-center w-full'>
+    <main className='flex flex-col gap-10 lg:gap-6 items-center min-h-[550px] relative py-20 md:py-16'>
+      <div className='flex flex-col items-center w-full mt-10'>
         <h1 className='text-4xl font-powerGrotesk '>
           Your One-Stop Event Solution.
         </h1>
@@ -18,7 +18,7 @@ export default function Home() {
           Streamline Your Event Journey.
         </p>
       </div>
-      <Button>
+      <Button href='/create-event'>
         Create Event <ArrowUpRight />
       </Button>
 
@@ -26,22 +26,22 @@ export default function Home() {
       <Image
         src={AsterickBig}
         alt='Asterick Big'
-        className='z-[2] absolute right-[-40px] bottom-[-60px]'
+        className='z-[2] absolute right-[-40px] bottom-[-100px] max-md:hidden'
       />
       <Image
         src={AsterickSmall}
-        alt='Asterick Big'
-        className='z-[-10] absolute left-0 top-[-20px]'
+        alt='Asterick Small'
+        className='z-[-10] absolute left-0 top-[-20px] max-md:hidden'
       />
       <Image
         src={DiamondBig}
-        alt='Asterick Big'
-        className='z-[-10] absolute left-0 bottom-0'
+        alt='Diamond Big'
+        className='z-[-10] absolute left-0 bottom-0 max-md:hidden'
       />
       <Image
         src={DiamondSmall}
-        alt='Asterick Big'
-        className='z-[-10] absolute right-0 top-0'
+        alt='Diamond Small'
+        className='z-[-10] absolute right-0 top-0 max-md:hidden'
       />
     </main>
   )

@@ -1,36 +1,40 @@
-import { cn } from "@/utils/utils"
-import { VariantProps,  cva } from "class-variance-authority"
-import Link from "next/link"
-import { ButtonHTMLAttributes ,forwardRef} from "react"
+import { cn } from '@/utils/utils'
+import { VariantProps, cva } from 'class-variance-authority'
+import Link from 'next/link'
+import { ButtonHTMLAttributes, forwardRef } from 'react'
 
 const buttonVariants = cva(
-    'h-12 w-max px-6 py-2 inline-flex items-center justify-center rounded-[15px] font-powerGrotesk text-black-500',
-    {
-        variants: {
-            variant: {
-                default: 'bg-action text-black-500',
-                outline: "border border-action text-white-500 hover:bg-black-500 hover:text-white-500",
-                text: "border-none bg-transparent text-white-500 hover:text-action duration-150"
-            },
-            size: {
-                default: 'text-md',
-                lg: 'text-lg',
-            }
-        },
-        defaultVariants: {
-            variant: "default",
-            size: "default"
-        }
+  'h-12 w-max px-6 py-2 inline-flex items-center justify-center rounded-[15px] font-powerGrotesk text-black-500',
+  {
+    variants: {
+      variant: {
+        default: 'bg-accent text-black-500 cursor-pointer hover:bg-accent-500',
+        outline:
+          'border border-accent text-white-500 hover:bg-black-500 hover:text-white-500',
+        text: 'border-none bg-transparent text-white-500 hover:text-accent duration-150'
+      },
+      size: {
+        default: 'text-md',
+        lg: 'text-lg'
+      }
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default'
     }
+  }
 )
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> , VariantProps<typeof buttonVariants> {
-    href?: string
-    icon?: React.ReactNode
+interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  href?: string
+  icon?: React.ReactNode
 }
 
-const Button = forwardRef<HTMLButtonElement,ButtonProps>(({className,children, href ,icon, size,variant,...props},ref) => {
-     if (href) {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, children, href, icon, size, variant, ...props }, ref) => {
+    if (href) {
       return (
         <Link
           href={href}
@@ -40,14 +44,19 @@ const Button = forwardRef<HTMLButtonElement,ButtonProps>(({className,children, h
         </Link>
       )
     }
-  return (
-    <button ref={ref} className={cn(buttonVariants({variant,size,className}))} {...props} >
+    return (
+      <button
+        ref={ref}
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...props}
+      >
         {children}
         {icon}
-    </button>
-  )
-})
+      </button>
+    )
+  }
+)
 
 Button.displayName = 'Button'
 
-export { Button , buttonVariants };
+export { Button, buttonVariants }

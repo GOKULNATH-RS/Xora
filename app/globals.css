@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+bo :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -25,11 +25,11 @@ body {
     text-wrap: balance;
   }
 
-  .inner-width{
-    @apply mx-[200px]
+  .inner-width {
+    @apply mx-[180px] max-lg:mx-[150px] max-sm:mx-[60px];
   }
 }
 
-.bn-editor{
+.bn-ed itor {
   background-color: #0a0a0a;
 }
