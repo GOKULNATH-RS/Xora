@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/Button'
+import { Button } from '@/components/ui/CustomButton'
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 

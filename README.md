@@ -1,5 +1,3 @@
-# Xora
-
 ![XORA](./public/assets/XORA.png)
 
 Your one stop Event platform

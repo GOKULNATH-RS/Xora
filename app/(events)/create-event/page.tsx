@@ -1,4 +1,6 @@
-import { Input } from '@/components/ui/Input'
+import { Input } from '@/components/ui/CustomInput'
+import dateRange from '../../../public/assets/date-range.svg'
+import Image from 'next/image'
 
 type Props = {}
 
@@ -7,13 +9,13 @@ export default function EventCreationPage({}: Props) {
     <section className='my-6'>
       <div className='flex justify-between '>
         <div className='flex-[0.4] h-full w-full px-6'>
-          <div className='w-[350px] bg-black-700 h-[300px]' />
+          <div className='w-[350px] bg-black-700/50 rounded-lg h-[300px]' />
         </div>
         <div className='flex-[0.6] flex flex-col gap-5'>
           <Input
             type='text'
-            size={'lg'}
-            placeholder='Event name'
+            size='lg'
+            placeholder='Enter your Event name'
             className='font-powerGrotesk'
           />
           <Input
@@ -22,8 +24,14 @@ export default function EventCreationPage({}: Props) {
             className='ml-2'
           />
           <div className=''>
-            <p>Event Date</p>
-            <div></div>
+            <p className='text-md font-medium'>Event Date</p>
+            <div className='flex gap-2 items-center'>
+              <div>date picker</div>
+              <div>
+                <Image src={dateRange} height={16} alt='date range' />
+              </div>
+              <div>date picker</div>
+            </div>
           </div>
         </div>
       </div>

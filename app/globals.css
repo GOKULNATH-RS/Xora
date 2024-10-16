@@ -29,7 +29,3 @@ body {
     @apply mx-[180px] max-lg:mx-[150px] max-sm:mx-[60px];
   }
 }
-
-.bn-ed itor {
-  background-color: #0a0a0a;
-}
