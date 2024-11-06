@@ -4,9 +4,7 @@ import star from '../../../public/assets/star.svg'
 import { EventCard } from '@/components/ui/EventCard'
 import { Tag } from '@/components/ui/Tag'
 
-type Props = {}
-
-export default function Events({}: Props) {
+export default function Loading() {
   const eventData = [
     {
       eventName: 'Music Concert',
