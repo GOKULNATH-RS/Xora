@@ -4,13 +4,16 @@ import { Input } from '@/components/ui/CustomInput'
 import dateRange from '../../../public/assets/date-range.svg'
 import Image from 'next/image'
 import { DatePicker } from '@/components/ui/DatePicker'
-import { useEffect, useState } from 'react'
-import TextEditor from '@/components/common/TextEditor'
+import { useState } from 'react'
 import { Button } from '@/components/ui/CustomButton'
 import { createEventAction } from '@/actions/events'
-import { set } from 'date-fns'
+import dynamic from 'next/dynamic'
 
 type Props = {}
+
+const TextEditor = dynamic(() => import('@/components/common/TextEditor'), {
+  ssr: false
+})
 
 export default function EventCreationPage({}: Props) {
   const [eventTitle, setEventTitle] = useState<string>('')

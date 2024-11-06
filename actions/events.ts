@@ -1,6 +1,5 @@
 'use server'
 
-import EventDetails from '@/app/(events)/event/[id]/page'
 import connectDB from '@/db/db'
 
 export async function createEventAction(eventDetails: any) {
