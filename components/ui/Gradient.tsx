@@ -3,7 +3,7 @@ import { cva, VariantProps } from 'class-variance-authority'
 import { FC } from 'react'
 
 const gradientVariants = cva(
-  'bg-gradient-to-b from-accent to-[#759204] absolute rounded-full ',
+  'bg-gradient-to-b from-tertiary to-[#759204] absolute rounded-full ',
   {
     variants: {
       variant: {
