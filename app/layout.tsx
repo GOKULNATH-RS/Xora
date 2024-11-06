@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${manRope.className} ${powerGrotesk.variable} antialiased inner-width`}
+        className={`${manRope.className} ${powerGrotesk.variable} antialiased inner-width dark`}
       >
         <Header />
         {children}
