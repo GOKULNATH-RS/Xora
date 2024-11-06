@@ -10,7 +10,11 @@ const EventSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    date: {
+    start_date: {
+      type: Date,
+      required: true
+    },
+    end_date: {
       type: Date,
       required: true
     },
@@ -33,6 +37,10 @@ const EventSchema = new mongoose.Schema(
     participants: {
       type: Array<mongoose.Schema.Types.ObjectId>(),
       default: []
+    },
+    published: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
