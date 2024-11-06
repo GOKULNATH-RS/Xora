@@ -102,8 +102,6 @@ export default function Events({}: Props) {
     }
   ]
 
-  const eventNames = eventData.map((event) => event.eventName)
-  console.log(eventNames)
   return (
     <section>
       <div>
