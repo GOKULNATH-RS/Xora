@@ -17,7 +17,7 @@ const Header = (props: Props) => {
         Discover Events <ArrowUpRight />
       </Button>
 
-      <div className='blur-[250px]  bg-gradient-to-t from-accent to-[#759204] absolute top-[-160px] left-0 right-0 mx-auto rounded-full h-[335px] w-[335px] z-[-999]' />
+      <div className='blur-[250px]  bg-gradient-to-t from-tertiary to-[#759204] absolute top-[-160px] left-0 right-0 mx-auto rounded-full h-[335px] w-[335px] z-[-999]' />
     </header>
   )
 }

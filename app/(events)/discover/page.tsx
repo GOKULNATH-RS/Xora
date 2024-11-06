@@ -14,7 +14,7 @@ export default function Events({}: Props) {
       location: 'New York, NY',
       date: '2023-11-01',
       imgSrc:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9APUNLw_nOBJ8dBgOGYP5PVNknt7QIoRhA&s',
+        'https://firebasestorage.googleapis.com/v0/b/photo-management-app-17909.appspot.com/o/xora%2Fmusic-concert.jpg?alt=media&token=b9959dd3-2aa2-431a-a843-d948d952c095',
       href: '/event/music-concert'
     },
     {
@@ -23,7 +23,7 @@ export default function Events({}: Props) {
       location: 'San Francisco, CA',
       date: '2023-11-05',
       imgSrc:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9APUNLw_nOBJ8dBgOGYP5PVNknt7QIoRhA&s',
+        'https://firebasestorage.googleapis.com/v0/b/photo-management-app-17909.appspot.com/o/xora%2Fart-exhibition.jpg?alt=media&token=e583f0ff-6779-41a9-b30b-8e3641294dab',
       href: '/event/art-exhibition'
     },
     {
@@ -33,7 +33,7 @@ export default function Events({}: Props) {
       location: 'Austin, TX',
       date: '2023-11-10',
       imgSrc:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9APUNLw_nOBJ8dBgOGYP5PVNknt7QIoRhA&s',
+        'https://firebasestorage.googleapis.com/v0/b/photo-management-app-17909.appspot.com/o/xora%2Ftech-conf.jpg?alt=media&token=a89b25a5-86ba-49a3-8f2d-f3b00165d17d',
       href: '/event/tech-conference'
     },
     {
@@ -42,8 +42,18 @@ export default function Events({}: Props) {
       location: 'Los Angeles, CA',
       date: '2023-11-15',
       imgSrc:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9APUNLw_nOBJ8dBgOGYP5PVNknt7QIoRhA&s',
+        'https://firebasestorage.googleapis.com/v0/b/photo-management-app-17909.appspot.com/o/xora%2Ffood-festival.jpg?alt=media&token=2c4cac69-6647-4b6f-b9fe-074123b30b65',
       href: '/event/food-festival'
+    },
+
+    {
+      eventName: 'Film Festival',
+      eventDescription: 'Watch the latest indie films.',
+      location: 'Seattle, WA',
+      date: '2023-11-25',
+      imgSrc:
+        'https://firebasestorage.googleapis.com/v0/b/photo-management-app-17909.appspot.com/o/xora%2Ffilm-fest.jpg?alt=media&token=34a9e575-ed77-4bbb-baad-fd139e634a64',
+      href: '/event/film-festival'
     },
     {
       eventName: 'Marathon',
@@ -53,15 +63,6 @@ export default function Events({}: Props) {
       imgSrc:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9APUNLw_nOBJ8dBgOGYP5PVNknt7QIoRhA&s',
       href: '/event/marathon'
-    },
-    {
-      eventName: 'Film Festival',
-      eventDescription: 'Watch the latest indie films.',
-      location: 'Seattle, WA',
-      date: '2023-11-25',
-      imgSrc:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9APUNLw_nOBJ8dBgOGYP5PVNknt7QIoRhA&s',
-      href: '/event/film-festival'
     },
     {
       eventName: 'Book Fair',
@@ -101,6 +102,8 @@ export default function Events({}: Props) {
     }
   ]
 
+  const eventNames = eventData.map((event) => event.eventName)
+  console.log(eventNames)
   return (
     <section>
       <div>
@@ -118,7 +121,7 @@ export default function Events({}: Props) {
         </div>
         <div>
           <Tag>
-            <div className='h-[10px] w-[10px] rounded-full bg-accent' />
+            <div className='h-[10px] w-[10px] rounded-full bg-tertiary' />
             <p>Live</p>
           </Tag>
           <Tag>
