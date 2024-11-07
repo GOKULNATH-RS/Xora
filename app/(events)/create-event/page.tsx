@@ -6,8 +6,12 @@ import Image from 'next/image'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { useState } from 'react'
 import { Button } from '@/components/ui/CustomButton'
+import { Button as DefaultButton } from '@/components/ui/button'
 import { createEventAction } from '@/actions/events'
 import dynamic from 'next/dynamic'
+import { Trash2 } from 'lucide-react'
+import ImageUploader from '@/components/common/ImageUploader'
+import { useRouter } from 'next/navigation'
 
 type Props = {}
 
@@ -16,39 +20,65 @@ const TextEditor = dynamic(() => import('@/components/common/TextEditor'), {
 })
 
 export default function EventCreationPage({}: Props) {
+  const router = useRouter()
   const [eventTitle, setEventTitle] = useState<string>('')
   const [eventDescription, setEventDescription] = useState<string>('')
   const [location, setLocation] = useState<string>('')
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
   const [aboutEvent, setAboutEvent] = useState<any>()
+  const [imageUrl, setImageUrl] = useState<string>('')
 
   async function publishEvent(status: 'draft' | 'publish') {
-    await createEventAction({
+    const eventDetails = {
       eventTitle,
       eventDescription,
-      location,
       startDate,
       endDate,
-      aboutEvent,
-      status
-    })
+      location,
+      imageUrl,
+      status,
+      aboutEvent
+    }
+
+    // TODO: Add Toast notification
+    createEventAction(eventDetails)
+      .then((res) => {
+        const response = JSON.parse(res as string)
+        if (response.message === 'Event created successfully')
+          router.push('/discover')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
     <section className='my-6'>
-      <div className='flex justify-between '>
-        <div className='flex-[0.4] h-full w-full px-6 flex flex-col gap-2'>
-          <div className='w-[350px] bg-black-700/50 rounded-lg h-[300px]'>
-            {/* //TODO: Add image upload field */}
-          </div>
-
-          <div>
-            <p className='text-md font-medium'>Event Venue</p>
-            <div className='flex gap-2 items-center my-2'>
-              {/* // TODO: Add the location input field */}
-              <p>Location</p>
-            </div>
+      <div className='flex justify-between'>
+        <div className='flex-[0.4] h-max w-full px-6 flex flex-col gap-2'>
+          <div className='w-[350px] rounded-xl min-h-[300px] flex justify-center items-center'>
+            {!imageUrl ? (
+              <div className='bg-black-500/50 rounded-xl w-full'>
+                <ImageUploader setFunction={setImageUrl} />
+              </div>
+            ) : (
+              <div className='w-full h-full relative '>
+                <img
+                  src={imageUrl}
+                  alt='event image'
+                  className='mb-2 rounded-xl'
+                />
+                <DefaultButton
+                  variant='destructive'
+                  size={'sm'}
+                  onClick={() => setImageUrl('')}
+                  className='flex items-center gap-1'
+                >
+                  <Trash2 size={12} /> Remove Photo
+                </DefaultButton>
+              </div>
+            )}
           </div>
         </div>
 
@@ -79,6 +109,20 @@ export default function EventCreationPage({}: Props) {
               <div>
                 <DatePicker label='End Date' setFunction={setEndDate} />
               </div>
+            </div>
+          </div>
+
+          {/* // TODO: Add the location input field */}
+
+          <div>
+            <p className='text-md font-medium'>Event Venue</p>
+            <div className='flex gap-2 items-center'>
+              <Input
+                placeholder='Enter your location'
+                type='text'
+                className='font-powerGrotesk'
+                onChange={(e) => setLocation(e.target.value)}
+              />
             </div>
           </div>
 
