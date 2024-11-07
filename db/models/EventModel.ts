@@ -31,8 +31,8 @@ const EventSchema = new mongoose.Schema(
       required: true
     },
     hosted_by: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      type: Object,
+      required: true
     },
     participants: {
       type: Array<mongoose.Schema.Types.ObjectId>(),
