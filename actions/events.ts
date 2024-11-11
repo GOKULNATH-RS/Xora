@@ -56,3 +56,17 @@ export async function createEventAction(eventDetails: any) {
       })
   })
 }
+
+export async function listAllEvents() {
+  await connectDB()
+
+  return new Promise((resolve, reject) => {
+    Event.find()
+      .then((result) => {
+        resolve(JSON.stringify(result))
+      })
+      .catch((err) => {
+        reject(JSON.stringify({ message: 'Error fetching events', error: err }))
+      })
+  })
+}
