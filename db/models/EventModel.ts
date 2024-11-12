@@ -27,7 +27,7 @@ const EventSchema = new mongoose.Schema(
       required: true
     },
     about: {
-      type: Array,
+      type: String,
       required: true
     },
     hosted_by: {
