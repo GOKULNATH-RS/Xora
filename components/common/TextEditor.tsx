@@ -17,7 +17,7 @@ export default function TextEditor({
 }) {
   // Creates a new editor instance.
   const editor = useCreateBlockNote({
-    initialContent: JSON.parse(content)
+    initialContent: content ? JSON.parse(content) : undefined
   })
 
   // Renders the editor instance using a React component.

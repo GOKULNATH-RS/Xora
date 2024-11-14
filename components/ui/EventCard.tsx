@@ -47,7 +47,7 @@ const EventCard: FC<EventCardProps> = ({
         <img
           src={imgSrc}
           alt={eventName}
-          className='h-[135px] w-[135px] bg-white-500/30 rounded-[12px] overflow-hidden object-center'
+          className='h-[135px] w-[135px] bg-transparent rounded-[12px] overflow-hidden object-center'
         />
       </div>
     </Link>
