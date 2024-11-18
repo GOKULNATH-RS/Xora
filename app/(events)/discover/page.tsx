@@ -3,10 +3,11 @@ import React from 'react'
 import star from '../../../public/assets/star.svg'
 import { EventCard } from '@/components/ui/EventCard'
 import { Tag } from '@/components/ui/Tag'
+import { listAllEvents } from '@/actions/events'
 
 type Props = {}
 
-export default function Events({}: Props) {
+export default async function Events({}: Props) {
   const eventData = [
     {
       eventName: 'Music Concert',
@@ -102,6 +103,9 @@ export default function Events({}: Props) {
     }
   ]
 
+  const res = await listAllEvents()
+  const events = JSON.parse(res as string)
+
   return (
     <section>
       <div>
@@ -128,18 +132,25 @@ export default function Events({}: Props) {
           </Tag>
         </div>
       </div>
-      <div className='flex flex-wrap justify-center my-10'>
-        {eventData.map((event, index) => (
-          <EventCard
-            key={index}
-            eventName={event.eventName}
-            eventDescription={event.eventDescription}
-            location={event.location}
-            date={event.date}
-            imgSrc={event.imgSrc}
-            href={event.href}
-          />
-        ))}
+      <div className='flex flex-wrap justify-center  my-10'>
+        {/* //TODO:add event type  */}
+        {events.length === 0 ? (
+          <p>No Events</p>
+        ) : (
+          events.map((event: any, index: number) => (
+            <EventCard
+              key={index}
+              eventName={event.title}
+              eventDescription={event.short_description}
+              location={event.location}
+              date={new Date(event.start_date)
+                .toLocaleDateString('en-GB')
+                .replace(/\//g, '-')}
+              imgSrc={event.imageUrl}
+              href={event._id}
+            />
+          ))
+        )}
       </div>
     </section>
   )

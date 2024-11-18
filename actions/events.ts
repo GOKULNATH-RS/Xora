@@ -4,9 +4,12 @@ import { auth } from '@/auth'
 import connectDB from '@/db/db'
 import Event from '@/db/models/EventModel'
 import { resolve } from 'dns'
+import mongoose from 'mongoose'
 
+// TODO : Add type to eventDetails
 export async function createEventAction(eventDetails: any) {
-  const session = await auth()
+  // TODO: Add session Type
+  const session: any = await auth()
   // TODO:should add zod validation here
   await connectDB()
 
@@ -21,11 +24,7 @@ export async function createEventAction(eventDetails: any) {
     aboutEvent
   } = eventDetails
 
-  const hosted_by = {
-    email: session?.user?.email,
-    name: session?.user?.name,
-    image: session?.user?.image
-  }
+  const hosted_by = session?._id
 
   const published = status === 'publish'
 
@@ -53,6 +52,35 @@ export async function createEventAction(eventDetails: any) {
       })
       .catch((err) => {
         reject(JSON.stringify({ message: 'Error creating event', error: err }))
+      })
+  })
+}
+
+export async function listAllEvents() {
+  await connectDB()
+
+  return new Promise((resolve, reject) => {
+    Event.find()
+      .then((result) => {
+        resolve(JSON.stringify(result))
+      })
+      .catch((err) => {
+        reject(JSON.stringify({ message: 'Error fetching events', error: err }))
+      })
+  })
+}
+
+export async function getFunction(id: mongoose.Schema.Types.ObjectId) {
+  await connectDB()
+
+  return new Promise(async (resolve, reject) => {
+    Event.findById(id)
+      .populate('hosted_by')
+      .then((result) => {
+        resolve(JSON.stringify(result))
+      })
+      .catch((err) => {
+        reject(JSON.stringify({ message: 'Error fetching event', error: err }))
       })
   })
 }
