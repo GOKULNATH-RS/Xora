@@ -134,19 +134,23 @@ export default async function Events({}: Props) {
       </div>
       <div className='flex flex-wrap justify-center  my-10'>
         {/* //TODO:add event type  */}
-        {events.map((event: any, index: number) => (
-          <EventCard
-            key={index}
-            eventName={event.title}
-            eventDescription={event.short_description}
-            location={event.location}
-            date={new Date(event.start_date)
-              .toLocaleDateString('en-GB')
-              .replace(/\//g, '-')}
-            imgSrc={event.imageUrl}
-            href={event._id}
-          />
-        ))}
+        {events.length === 0 ? (
+          <p>No Events</p>
+        ) : (
+          events.map((event: any, index: number) => (
+            <EventCard
+              key={index}
+              eventName={event.title}
+              eventDescription={event.short_description}
+              location={event.location}
+              date={new Date(event.start_date)
+                .toLocaleDateString('en-GB')
+                .replace(/\//g, '-')}
+              imgSrc={event.imageUrl}
+              href={event._id}
+            />
+          ))
+        )}
       </div>
     </section>
   )

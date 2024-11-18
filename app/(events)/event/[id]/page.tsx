@@ -11,10 +11,11 @@ import {
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
+import mongoose from 'mongoose'
 
 type Props = {
   params: {
-    id: string
+    id: mongoose.Schema.Types.ObjectId
   }
 }
 
@@ -95,7 +96,6 @@ export default async function EventDetails({ params }: Props) {
                 <p className='text-base'>{location}</p>
               </div>
             </div>
-
             {/* Hosted By */}
             <div className='my-2'>
               <p className=' px-[2px]'>Hosted By</p>

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { type } from 'os'
 
 const EventSchema = new mongoose.Schema(
   {
@@ -31,13 +32,15 @@ const EventSchema = new mongoose.Schema(
       required: true
     },
     hosted_by: {
-      type: Object,
-      required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     },
-    participants: {
-      type: Array<mongoose.Schema.Types.ObjectId>(),
-      default: []
-    },
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
     published: {
       type: Boolean,
       default: false
