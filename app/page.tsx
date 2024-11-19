@@ -18,9 +18,12 @@ export default function Home() {
           Streamline Your Event Journey.
         </p>
       </div>
-      <Button href='/create-event'>
-        Create Event <ArrowUpRight />
-      </Button>
+      <div className='flex'>
+        <Button href='/create-event'>Create Event</Button>
+        <Button href='/discover' variant='text' className='items-end'>
+          Discover Events <ArrowUpRight />
+        </Button>
+      </div>
 
       {/* Images */}
       <Image
