@@ -85,7 +85,7 @@ export default async function EventDetails({ params }: Props) {
               </div>
               {start_date !== end_date && (
                 <div>
-                  <p>{formatDatetoStr(convertDate(end_date))}</p>
+                  <p>{`-  ${formatDatetoStr(convertDate(end_date))}`}</p>
                 </div>
               )}
             </div>

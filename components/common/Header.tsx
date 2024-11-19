@@ -19,6 +19,7 @@ type Props = {}
 
 const Header = async (props: Props) => {
   const session = await auth()
+
   return (
     <header className='w-full min-h-[100px]  flex justify-between items-center'>
       <Link href='/'>
@@ -27,43 +28,39 @@ const Header = async (props: Props) => {
 
       {session && session?.user ? (
         <div className='flex items-center'>
-          <Button href='/discover' variant='text' className='items-end'>
-            Discover Events <ArrowUpRight />
-          </Button>
           {session?.user?.image && (
-            <>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Avatar>
-                    <AvatarImage src={session.user.image} />
-                    <AvatarFallback className='bg-black-500 text-white border-[2px] border-white/40'>
-                      {session.user.name?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem className='p-0'>
-                    <form
-                      action={async () => {
-                        'use server'
-                        await signOut({ redirectTo: '/' })
-                      }}
-                      className='w-full h-full'
+            <DropdownMenu>
+              <DropdownMenuTrigger className='flex items-center gap-2'>
+                <Avatar>
+                  <AvatarImage src={session.user.image} />
+                  <AvatarFallback className='bg-black-500 text-white border-[2px] border-white/40'>
+                    {session.user.name?.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <p className='text-base font-semibold'>{session?.user?.name}</p>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem className='p-0'>
+                  <form
+                    action={async () => {
+                      'use server'
+                      await signOut({ redirectTo: '/' })
+                    }}
+                    className='w-full h-full'
+                  >
+                    <button
+                      type='submit'
+                      className='w-full h-full px-2 py-1.5 text-start'
                     >
-                      <button
-                        type='submit'
-                        className='w-full h-full px-2 py-1.5 text-start'
-                      >
-                        Logout
-                      </button>
-                    </form>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
+                      Logout
+                    </button>
+                  </form>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
       ) : (
