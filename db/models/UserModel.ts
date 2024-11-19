@@ -12,6 +12,11 @@ const UserSchema = new mongoose.Schema(
     },
     image: {
       type: String
+    },
+    savedEvents: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Event',
+      default: []
     }
   },
   { timestamps: true }
