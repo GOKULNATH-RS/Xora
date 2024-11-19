@@ -75,7 +75,8 @@ export async function getFunction(id: mongoose.Schema.Types.ObjectId) {
 
   return new Promise(async (resolve, reject) => {
     Event.findById(id)
-      .populate('hosted_by')
+      .populate('hosted_by', { _id: 1, name: 1, email: 1, image: 1 })
+      .populate('participants', { name: 1, email: 1, image: 1 })
       .then((result) => {
         resolve(JSON.stringify(result))
       })

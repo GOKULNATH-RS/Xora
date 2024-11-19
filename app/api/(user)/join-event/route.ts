@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
 
   //check if already joined
   const event = await Event.findOne({ _id: eventId, participants: userId })
-  console.log(event)
   if (event) {
     return NextResponse.json({
       message: 'Already joined the event'

@@ -1,9 +1,10 @@
+'use client'
 import { getFunction } from '@/actions/events'
 import ImageUploader from '@/components/common/ImageUploader'
 import { Button } from '@/components/ui/CustomButton'
 import { DatePicker } from '@/components/ui/DatePicker'
 import { Tag } from '@/components/ui/Tag'
-import { convertDate, formatDatetoStr } from '@/utils/utils'
+import { convertDate, formatDatetoStr } from '@/lib/utils'
 import { CalendarDays, MapPin, Trash2 } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import {
@@ -12,6 +13,8 @@ import {
   HoverCardTrigger
 } from '@/components/ui/hover-card'
 import mongoose from 'mongoose'
+import { useEffect, useState } from 'react'
+import { title } from 'process'
 
 type Props = {
   params: {
@@ -19,15 +22,44 @@ type Props = {
   }
 }
 
+type Event = {
+  title: string
+  short_description: string
+  start_date: string
+  end_date: string
+  location: string
+  imageUrl: string
+  about: string
+  hosted_by: {
+    name: string
+    email: string
+    image: string
+  }
+  published: boolean
+  participants: Array<Object>
+}
+
 const TextEditor = dynamic(() => import('@/components/common/TextEditor'), {
   ssr: false
 })
 
-export default async function EventDetails({ params }: Props) {
+export default function EventDetails({ params }: Props) {
   const { id } = params
+  const [event, setEvent] = useState<Event>()
 
-  const res = await getFunction(id)
-  const event = JSON.parse(res as string)
+  async function getEvent() {
+    const res = await getFunction(id)
+    const EventDetails = JSON.parse(res as string)
+    setEvent(EventDetails)
+  }
+
+  useEffect(() => {
+    getEvent()
+  }, [id])
+
+  // TODO: Add Skeleton Loading
+  if (!event) return <div>Loading...</div>
+
   const {
     title,
     short_description,
@@ -55,6 +87,7 @@ export default async function EventDetails({ params }: Props) {
             </div>
           </div>
           <div>
+            {/* //TODO: Add Participants as Avatar Group */}
             <p>100+ Participating</p>
           </div>
           <div className='my-4 flex gap-2'>
