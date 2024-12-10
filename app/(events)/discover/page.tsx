@@ -4,6 +4,7 @@ import star from '../../../public/assets/star.svg'
 import { EventCard } from '@/components/ui/EventCard'
 import { Tag } from '@/components/ui/Tag'
 import { listAllEvents } from '@/actions/events'
+import { EventCardSkeleton } from '@/components/ui/EventCardSkeleton'
 
 type Props = {}
 

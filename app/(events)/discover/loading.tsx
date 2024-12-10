@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import React from 'react'
 import star from '../../../public/assets/star.svg'
-import { EventCard } from '@/components/ui/EventCard'
 import { Tag } from '@/components/ui/Tag'
+import { EventCardSkeleton } from '@/components/ui/EventCardSkeleton'
 
 export default function Loading() {
   const eventData = [
@@ -126,17 +126,10 @@ export default function Loading() {
           </Tag>
         </div>
       </div>
+      <div></div>
       <div className='flex flex-wrap justify-center my-10'>
         {eventData.map((event, index) => (
-          <EventCard
-            key={index}
-            eventName={event.eventName}
-            eventDescription={event.eventDescription}
-            location={event.location}
-            date={event.date}
-            imgSrc={event.imgSrc}
-            href={event.href}
-          />
+          <EventCardSkeleton />
         ))}
       </div>
     </section>
