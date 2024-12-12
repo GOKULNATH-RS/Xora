@@ -1,10 +1,8 @@
 import { getFunction } from '@/actions/events'
-import ImageUploader from '@/components/common/ImageUploader'
 import { Button } from '@/components/ui/CustomButton'
-import { DatePicker } from '@/components/ui/DatePicker'
 import { Tag } from '@/components/ui/Tag'
 import { convertDate, formatDatetoStr } from '@/utils/utils'
-import { CalendarDays, MapPin, Trash2 } from 'lucide-react'
+import { CalendarDays, MapPin } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import {
   HoverCard,
