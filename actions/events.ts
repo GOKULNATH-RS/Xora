@@ -84,3 +84,29 @@ export async function getFunction(id: mongoose.Schema.Types.ObjectId) {
       })
   })
 }
+
+export async function joinEvent(eventId: mongoose.Schema.Types.ObjectId) {
+  // TODO: Add session Type
+  const session: any = await auth()
+  // TODO:should add zod validation here
+  await connectDB()
+
+  console.log('Joining event ,', session?._id)
+
+  return new Promise(async (resolve, reject) => {
+    Event.findById({ _id: eventId })
+      .then(async (event) => {
+        if (event.participants.includes(session?.user?.id)) {
+          resolve(JSON.stringify({ message: 'User already joined the event' }))
+          return
+        }
+
+        event.participants.push(session?.user?.id)
+        await event.save()
+        resolve(JSON.stringify({ message: 'Event joined successfully' }))
+      })
+      .catch((err) => {
+        reject(JSON.stringify({ message: 'Error joining event', error: err }))
+      })
+  })
+}

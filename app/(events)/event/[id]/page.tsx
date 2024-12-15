@@ -2,7 +2,7 @@ import { getFunction } from '@/actions/events'
 import { Button } from '@/components/ui/CustomButton'
 import { Tag } from '@/components/ui/Tag'
 import { convertDate, formatDatetoStr } from '@/utils/utils'
-import { CalendarDays, MapPin } from 'lucide-react'
+import { CalendarDays, Check, MapPin } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import {
   HoverCard,
@@ -10,6 +10,9 @@ import {
   HoverCardTrigger
 } from '@/components/ui/hover-card'
 import mongoose from 'mongoose'
+import JoinEventButton from '@/components/common/JoinEventButton'
+import SaveEventButton from '@/components/common/SaveEventButton'
+import { auth } from '@/auth'
 
 type Props = {
   params: {
@@ -23,7 +26,6 @@ const TextEditor = dynamic(() => import('@/components/common/TextEditor'), {
 
 export default async function EventDetails({ params }: Props) {
   const { id } = params
-
   const res = await getFunction(id)
   const event = JSON.parse(res as string)
   const {
@@ -38,6 +40,8 @@ export default async function EventDetails({ params }: Props) {
     published,
     participants
   } = event
+
+  const session = await auth()
 
   return (
     <section className='my-6'>
@@ -56,10 +60,9 @@ export default async function EventDetails({ params }: Props) {
             <p>100+ Participating</p>
           </div>
           <div className='my-4 flex gap-2'>
-            <Button className='w-full'>Join Event</Button>
-            <Button variant={'outline'} className='w-full'>
-              Save Event
-            </Button>
+            {/* // TODO: Add Toast here for join and save */}
+            <JoinEventButton eventId={id} userId={session?.user?.id} />
+            <SaveEventButton eventId={id} />
           </div>
         </div>
 
