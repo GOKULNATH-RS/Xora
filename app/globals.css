@@ -17,7 +17,7 @@ body {
   }
 
   .inner-width {
-    @apply mx-[180px] max-lg:mx-[150px] max-sm:mx-[60px];
+    @apply mx-[10%] max-lg:mx-[150px] max-sm:mx-[60px];
   }
 }
 

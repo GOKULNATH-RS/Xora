@@ -1,16 +1,50 @@
 'use server'
-
 import { auth } from '@/auth'
 import connectDB from '@/db/db'
 import Event from '@/db/models/EventModel'
-import { resolve } from 'dns'
+import User from '@/db/models/UserModel'
 import mongoose from 'mongoose'
+import { z } from 'zod'
 
-// TODO : Add type to eventDetails
-export async function createEventAction(eventDetails: any) {
-  // TODO: Add session Type
-  const session: any = await auth()
-  // TODO:should add zod validation here
+/* ------------------------- Type Definitions ------------------------- */
+const eventSchema = z.object({
+  eventTitle: z.string(),
+  eventDescription: z.string(),
+  startDate: z.date(),
+  endDate: z.date(),
+  location: z.string(),
+  imageUrl: z.string().url(),
+  status: z.enum(['publish', 'draft']),
+  aboutEvent: z.string()
+})
+
+interface EventDetails extends z.infer<typeof eventSchema> {}
+
+interface APIResponse<T = any> {
+  message: string
+  data?: T
+  error?: any
+  status?: 'success' | 'error'
+}
+
+/* ------------------------- Create Event ------------------------- */
+export async function createEventAction(
+  eventDetails: unknown
+): Promise<APIResponse> {
+  const session = await auth()
+  if (!session?._id) {
+    return { message: 'Unauthorized', status: 'error' }
+  }
+
+  const parsed = eventSchema.safeParse(eventDetails)
+  if (!parsed.success) {
+    return {
+      message: 'Invalid input',
+      error: parsed.error.format(),
+      status: 'error'
+    }
+  }
+
   await connectDB()
 
   const {
@@ -22,11 +56,7 @@ export async function createEventAction(eventDetails: any) {
     imageUrl,
     status,
     aboutEvent
-  } = eventDetails
-
-  const hosted_by = session?._id
-
-  const published = status === 'publish'
+  } = parsed.data
 
   const newEvent = {
     title: eventTitle,
@@ -36,77 +66,147 @@ export async function createEventAction(eventDetails: any) {
     location,
     imageUrl,
     about: aboutEvent,
-    hosted_by,
-    published
+    hosted_by: session._id,
+    published: status === 'publish'
   }
 
-  return new Promise((resolve, reject) => {
-    Event.create(newEvent)
-      .then((result) => {
-        resolve(
-          JSON.stringify({
-            message: 'Event created successfully',
-            data: result
-          })
-        )
-      })
-      .catch((err) => {
-        reject(JSON.stringify({ message: 'Error creating event', error: err }))
-      })
-  })
+  try {
+    const result = await Event.create(newEvent)
+    return {
+      message: 'Event created successfully',
+      data: result,
+      status: 'success'
+    }
+  } catch (err) {
+    return { message: 'Error creating event', error: err, status: 'error' }
+  }
 }
 
-export async function listAllEvents() {
+/* ------------------------- List All Events ------------------------- */
+export async function listAllEvents(): Promise<APIResponse> {
   await connectDB()
-
-  return new Promise((resolve, reject) => {
-    Event.find()
-      .then((result) => {
-        resolve(JSON.stringify(result))
-      })
-      .catch((err) => {
-        reject(JSON.stringify({ message: 'Error fetching events', error: err }))
-      })
-  })
+  try {
+    const result = await Event.find()
+    return {
+      message: 'Events fetched successfully',
+      data: result,
+      status: 'success'
+    }
+  } catch (err) {
+    return { message: 'Error fetching events', error: err, status: 'error' }
+  }
 }
 
-export async function getFunction(id: mongoose.Schema.Types.ObjectId) {
+/* ------------------------- Get Event by ID ------------------------- */
+export async function getFunction(
+  id: string
+): Promise<APIResponse & { isSavedByUser?: boolean }> {
   await connectDB()
 
-  return new Promise(async (resolve, reject) => {
-    Event.findById(id)
-      .populate('hosted_by')
-      .then((result) => {
-        resolve(JSON.stringify(result))
-      })
-      .catch((err) => {
-        reject(JSON.stringify({ message: 'Error fetching event', error: err }))
-      })
-  })
+  try {
+    const event = await Event.findById(id).populate('hosted_by')
+    if (!event) {
+      return { message: 'Event not found', status: 'error' }
+    }
+
+    const session = await auth()
+    let isSavedByUser = false
+
+    if (session?._id) {
+      const user = await User.findById(session._id)
+      const eventObjectId = new mongoose.Types.ObjectId(id)
+      isSavedByUser = user?.saved_events?.some((saved: any) =>
+        saved.equals(eventObjectId)
+      )
+    }
+
+    return {
+      message: 'Event fetched successfully',
+      data: event,
+      status: 'success',
+      isSavedByUser
+    }
+  } catch (err) {
+    console.log(err)
+    return { message: 'Error fetching event', error: err, status: 'error' }
+  }
 }
 
-export async function joinEvent(eventId: mongoose.Schema.Types.ObjectId) {
-  // TODO: Add session Type
-  const session: any = await auth()
-  // TODO:should add zod validation here
+/* ------------------------- Join Event ------------------------- */
+export async function joinEvent(eventId: string){
+  const session = await auth()
+  if (!session?._id) {
+    return { message: 'Unauthorized', status: 'error', success: false }
+  }
+
   await connectDB()
 
-  console.log('Joining event ,', session?._id)
+  try {
+    const event = await Event.findById(eventId)
+    const user = await User.findById(session._id)
 
-  return new Promise(async (resolve, reject) => {
-    Event.findById({ _id: eventId })
-      .then(async (event) => {
-        if (event.participants.includes(session?.user?.id)) {
-          resolve(JSON.stringify({ message: 'User already joined the event' }))
-          return
-        }
+    if (!event) {
+      return { message: 'Event not found', status: 'error', success: false }
+    }
 
-        event.participants.push(session?.user?.id)
-        await event.save()
-        resolve(JSON.stringify({ message: 'Event joined successfully' }))
-      })
-      .catch((err) => {
-        reject(JSON.stringify({ message: 'Error joining event', error: err }))
-      })
-  })
+    if (event.participants.includes(session._id) || user.participating_events.includes(eventId)) {
+      return {
+        message: 'User already joined the event',
+        status: 'already_exist',
+        success: false
+      }
+    }
+
+    event.participants.push(session._id)
+    user.participating_events.push(event._id)
+
+    await event.save()
+    
+
+    return {
+      message: 'Event joined successfully',
+      status: 'success',
+      success: true
+    }
+  } catch (err) {
+    return {
+      message: 'Error joining event',
+      error: err,
+      status: 'error',
+      success: false
+    }
+  }
+}
+
+/* ------------------------- Save Event ------------------------- */
+export async function saveEvent(eventId: string) {
+  await connectDB()
+  const session = await auth()
+
+  if (!session?._id) {
+    return { success: false, message: 'Unauthorized' }
+  }
+
+  try {
+    const user = await User.findById(session._id)
+
+    if (!user) {
+      return { success: false, message: 'User not found' }
+    }
+
+    const eventObjectId = new mongoose.Types.ObjectId(eventId)
+
+    // Prevent duplicate saves
+    if (user.saved_events.includes(eventObjectId)) {
+      return { success: true, message: 'Already saved' }
+    }
+
+    user.saved_events.push(eventObjectId)
+    await user.save()
+
+    return { success: true, message: 'Event saved successfully' }
+  } catch (err) {
+    console.error('Error saving event:', err)
+    return { success: false, message: 'Internal Server Error' }
+  }
 }

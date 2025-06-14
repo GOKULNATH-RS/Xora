@@ -2,28 +2,39 @@
 
 import { Check } from 'lucide-react'
 import { Button } from '../ui/CustomButton'
-import { getFunction, joinEvent } from '@/actions/events'
-import { useEffect, useState } from 'react'
+import { useTransition, useState } from 'react'
+import { joinEvent } from '@/actions/events'
 
-const JoinEventButton = async ({ eventId, userId }: any) => {
-  const [isParticipating, setIsParticipating] = useState(false)
-  const [num, setNum] = useState(0)
+type Props = {
+  eventId: string
+  isJoined?: boolean
+}
 
-  async function checkParticipation() {}
+const JoinEventButton = ({ eventId, isJoined = false }: Props) => {
+  const [isPending, startTransition] = useTransition()
+  const [joined, setJoined] = useState(isJoined)
 
-  async function handleJoinEvent() {
-    await joinEvent(eventId)
-    console.log('Joining event')
+  const handleJoin = () => {
+    startTransition(async () => {
+      const res = await joinEvent(eventId)
+      if (res.success) {
+        setJoined(true)
+      }
+    })
   }
 
-  return !isParticipating ? (
-    <Button onClick={handleJoinEvent} className='w-full'>
-      Join Event
+  return !joined ? (
+    <Button
+      className='w-full'
+      onClick={handleJoin}
+      disabled={isPending}
+    >
+      {isPending ? 'Joining...' : 'Join Event'}
     </Button>
   ) : (
-    <Button disabled={true} variant={'disabled'} className='w-full px-4'>
+    <Button disabled variant='disabled' className='w-full px-4'>
       <Check className='text-tertiary' />
-      Joined Event
+        Joined Event
     </Button>
   )
 }
