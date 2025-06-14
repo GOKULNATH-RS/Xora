@@ -22,7 +22,7 @@ const EventCard: FC<EventCardProps> = ({
 }) => {
   return (
     <Link
-      href={`/event/${href}` || '/'}
+      href={`${href}` || '/'}
       className='bg-black-600/75 hover:bg-black-700 border-black-700 rounded-[20px] p-[8px] m-1 w-[500px] h-[150px] flex justify-between items-center backdrop-blur-[1px]'
     >
       <div className='mx-[5px] h-full flex-1 flex flex-col justify-between'>

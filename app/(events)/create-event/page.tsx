@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/CustomInput'
 import dateRange from '../../../public/assets/date-range.svg'
 import Image from 'next/image'
 import { DatePicker } from '@/components/ui/DatePicker'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/CustomButton'
 import { Button as DefaultButton } from '@/components/ui/button'
 import { createEventAction } from '@/actions/events'
@@ -12,6 +12,8 @@ import dynamic from 'next/dynamic'
 import { Trash2 } from 'lucide-react'
 import ImageUploader from '@/components/common/ImageUploader'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import { before } from 'node:test'
 
 type Props = {}
 
@@ -41,17 +43,35 @@ export default function EventCreationPage({}: Props) {
       aboutEvent
     }
 
-    // TODO: Add Toast notification
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)){
+      console.log(startDate,endDate)
+      toast.error("Select Event dates properly to publish event")
+      return
+    }
+
+    const toastId = toast.loading('Creating your event...')
+
     createEventAction(eventDetails)
       .then((res) => {
-        const response = JSON.parse(res as string)
-        if (response.message === 'Event created successfully')
+        console.log(res)
+        if (res.status === 'success') {
+          toast.success('Event created successfully!', { id: toastId })
           router.push('/discover')
-      })
-      .catch((err) => {
-        console.log(err)
+        } else {
+          toast.error('Failed to create event.', { id: toastId })
+        }
       })
   }
+
+  useEffect(() => {
+
+    if(startDate && endDate) {
+      if (new Date(startDate) > new Date(endDate)) {
+        setEndDate(new Date(startDate))
+      }
+    }
+
+  },[startDate])
 
   return (
     <section className='my-6'>
@@ -63,11 +83,11 @@ export default function EventCreationPage({}: Props) {
                 <ImageUploader setFunction={setImageUrl} />
               </div>
             ) : (
-              <div className='w-full h-full relative '>
+              <div className='w-full h-full relative'>
                 <img
                   src={imageUrl}
                   alt='event image'
-                  className='mb-2 rounded-xl'
+                  className='mb-2 rounded-xl  min-h-[300px] object-cover aspect-square'
                 />
                 <DefaultButton
                   variant='destructive'
@@ -101,13 +121,13 @@ export default function EventCreationPage({}: Props) {
             <p className='text-md font-medium'>Event Date</p>
             <div className='flex gap-2 items-center my-2'>
               <div>
-                <DatePicker label='Start Date' setFunction={setStartDate} />
+                <DatePicker label='Start Date' setFunction={setStartDate} disabled={{ before: new Date() }}/>
               </div>
               <div>
                 <Image src={dateRange} height={16} alt='date range' />
               </div>
               <div>
-                <DatePicker label='End Date' setFunction={setEndDate} />
+                <DatePicker label='End Date' setFunction={setEndDate} disabled={{ before: new Date(startDate as any) }} />
               </div>
             </div>
           </div>

@@ -8,11 +8,26 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     image: {
       type: String
-    }
+    },
+    saved_events: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+        default: []
+      }
+    ],
+    participating_events: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Event',
+        default: []
+      }
+    ]
   },
   { timestamps: true }
 )

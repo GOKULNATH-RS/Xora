@@ -28,6 +28,8 @@ const Header = async (props: Props) => {
 
       {session && session?.user ? (
         <div className='flex items-center'>
+          {/* Create Event Link */}
+          <Button href='/create-event' variant='text'>Create Event <ArrowUpRight /></Button>
           {session?.user?.image && (
             <DropdownMenu>
               <DropdownMenuTrigger className='flex items-center gap-2'>
@@ -42,7 +44,9 @@ const Header = async (props: Props) => {
               <DropdownMenuContent>
                 <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href={`/profile/${session._id}`} className='w-full h-full'>Profile</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem className='p-0'>
                   <form
                     action={async () => {
@@ -67,7 +71,7 @@ const Header = async (props: Props) => {
         <form
           action={async () => {
             'use server'
-            await signIn('google')
+              await signIn('google', { redirectTo: '/discover', redirect: true })
           }}
         >
           <Button type='submit' variant='text' className='items-end'>

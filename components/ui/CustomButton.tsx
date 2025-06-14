@@ -12,7 +12,9 @@ const buttonVariants = cva(
           'bg-tertiary text-black-500 cursor-pointer hover:bg-tertiary-500',
         outline:
           'border border-tertiary text-white-500 hover:bg-black-500 hover:text-white-500',
-        text: 'border-none bg-transparent text-white-500 hover:text-tertiary duration-150'
+        text: 'border-none bg-transparent text-white-500 hover:text-tertiary duration-150',
+        disabled:
+          'bg-transparent border border-tertiary/70 text-white-500 cursor-not-allowed'
       },
       size: {
         default: 'text-md',

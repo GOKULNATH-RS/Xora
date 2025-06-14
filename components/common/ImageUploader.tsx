@@ -1,5 +1,6 @@
 'use client'
 import { uploadToCloudinary } from '@/actions/uploadImage'
+import { toast } from 'sonner'
 
 const ImageUploader = ({
   setFunction
@@ -7,14 +8,20 @@ const ImageUploader = ({
   setFunction: React.Dispatch<React.SetStateAction<string>>
 }) => {
   async function handleImageUpload(e: any) {
+    const toastId = toast.loading("Uploading image...")
+
     const file = e.target.files[0]
     const formData = new FormData()
     formData.append('file', file)
-    // TODO: Add Toast notification
     uploadToCloudinary(file.name, formData).then((res) => {
       if (res.success) {
         setFunction(res.result?.secure_url as string)
-      }
+        toast.success("Image uploaded",{ id: toastId })
+      } else {
+        toast.error("Error uploading image",{ id: toastId })
+      } 
+    }).catch((e)  => {
+      toast.error("Error uploading image", { id: toastId })
     })
   }
 

@@ -14,12 +14,7 @@ export default async function EventDetails() {
           <div>
             <div className='w-[200px] h-[20px] bg-white-500/10 rounded-2xl animate-pulse' />
           </div>
-          <div className='my-4 flex gap-2'>
-            <Button className='w-full'>Join Event</Button>
-            <Button variant={'outline'} className='w-full'>
-              Save Event
-            </Button>
-          </div>
+         
         </div>
 
         <div className='flex-[0.6] flex flex-col gap-4 mt-6'>
